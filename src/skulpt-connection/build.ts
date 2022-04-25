@@ -1,5 +1,6 @@
 import { IProjectContent } from "../model/project";
 import { assetServer } from "./asset-server";
+import { ensureGpioConnection } from "./gpios";
 import { ensureSoundManager } from "./sound-manager";
 
 declare var Sk: any;
@@ -45,6 +46,7 @@ export const build = async (
   });
   try {
     ensureSoundManager();
+    ensureGpioConnection();
     Sk.pytch.async_load_image = (name: string) => {
       return assetServer.loadImage(name);
     };
