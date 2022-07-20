@@ -232,10 +232,27 @@ context("Management of project assets", () => {
     cy.get("input[type=text]").type("banana.png");
     cy.get("button").contains("Rename").should("not.be.disabled");
   });
+
+  context("Add clipart from library, handling errors", () => {
+    const chooseClipArt = (clipArtName: string) => {
+      // Select the first clipart
+      cy.contains("Choose from library").click();
+      cy.contains("Add to project").should("be.disabled");
+      cy.contains(clipArtName).click();
+      clickAdd();
+      cy.get(".modal-content").should("not.exist");
+    };
+
+    beforeEach(() => {
+      chooseClipArt("alien");
+      cy.pytchShouldShowAssets([...initialAssets, "alien.png"]);
+    });
+
     it("can add a clipart", () => {
       chooseClipArt("angel");
       cy.pytchShouldShowAssets([...initialAssets, "alien.png", "angel.png"]);
     });
+
     it("can scroll through the gallery to find clipart", () => {
       chooseClipArt("mouse");
       cy.pytchShouldShowAssets([...initialAssets, "alien.png", "mouse.png"]);
