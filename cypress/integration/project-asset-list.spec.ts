@@ -252,4 +252,16 @@ context("Management of project assets", () => {
       cy.pytchShouldShowAssets([...initialAssets, "alien.png"]);
     });
 
+    it("handles one failure and one success", () => {
+      cy.contains("Choose from library").click();
+      cy.get(".clipart-card").contains("alien").click({ force: true });
+      cy.get(".clipart-card").contains("angel").click({ force: true });
+      clickAdd();
+      cy.contains(
+        '1 clipart successfully added, but not the other (alien: Your project already contains an asset called "alien.png".) Please modify your selection.'
+      );
+      cy.contains("Cancel").click();
+      cy.pytchShouldShowAssets([...initialAssets, "alien.png", "angel.png"]);
+    });
+
 });
