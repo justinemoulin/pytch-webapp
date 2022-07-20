@@ -283,4 +283,22 @@ context("Management of project assets", () => {
       ]);
     });
 
+    it("handles one failure and two successes", () => {
+      cy.contains("Choose from library").click();
+      cy.get(".clipart-card").contains("alien").click({ force: true });
+      cy.get(".clipart-card").contains("angel").click({ force: true });
+      cy.get(".clipart-card").contains("basic_guy").click({ force: true });
+      clickAdd();
+      cy.contains(
+        '2 cliparts successfully added, but 1 problem encontered (alien: Your project already contains an asset called "alien.png".) Please modify your selection.'
+      );
+      cy.contains("Cancel").click();
+      cy.pytchShouldShowAssets([
+        ...initialAssets,
+        "alien.png",
+        "angel.png",
+        "basic_guy.png",
+      ]);
+    });
+  });
 });
