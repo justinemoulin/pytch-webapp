@@ -240,4 +240,16 @@ context("Management of project assets", () => {
       chooseClipArt("mouse");
       cy.pytchShouldShowAssets([...initialAssets, "alien.png", "mouse.png"]);
     });
+
+    it("rejects adding same clipart twice", () => {
+      cy.contains("Choose from library").click();
+      cy.get(".clipart-card").contains("alien").click({ force: true });
+      clickAdd();
+      cy.contains(
+        'oh, no! The selected clipart can not be added (alien: Your project already contains an asset called "alien.png".) Please modify your selection.'
+      );
+      cy.contains("Cancel").click();
+      cy.pytchShouldShowAssets([...initialAssets, "alien.png"]);
+    });
+
 });
